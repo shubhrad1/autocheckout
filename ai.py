@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 
 
-def ai_service(elements):
+def ai_service(elements, identifier):
     load_dotenv()
     token=os.getenv("OPENAI_API_KEY")
     endpoint = "https://models.github.ai/inference"
@@ -18,19 +18,22 @@ def ai_service(elements):
     api_key=token,
     )
 
+    auth_prompt="You are an expert at analyzing HTML UI elements. Your task is to find elements related to user authentication like login, sign in, register, etc."
+    buynow_prompt="You are an expert at analyzing HTML UI elements. Your task is to find element that is related to buy now or checkout. If not present give the next best fit element like add to cart"
+
     response = client.chat.completions.create(
     messages=[
         {
             "role": "system",
-            "content": "You are an expert at analyzing HTML UI elements. Your task is to find elements related to user authentication like login, sign in, register, etc.",
-        },
+            "content":{auth_prompt if identifier == "auth" else buynow_prompt}         
+            },
         {
             "role": "user",
-            "content": f"Here are some elements extracted:{elements}, determine which elements are related to user authentication.Return only the relevant elements in JSON format with keys: tag, text, id, class. Do not return any other information.",
+            "content": f"Here are some elements extracted:{elements},.Return only the relevant elements in JSON format with keys: tag, text, id, class. Do not return any other information.",
             
         }
         ],
-    model=model_name
+    model=model_name,
     )
 
-    print(response.choices[0].message.content)
+    return response.choices[0].message.content[0]
