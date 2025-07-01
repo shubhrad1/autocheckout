@@ -32,8 +32,8 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
 
 1. Set your environment variables for credentials:
     ```bash
-    export AMAZON_EMAIL=your_email@example.com
-    export AMAZON_PASSWORD=your_password
+    export EMAIL=your_email@example.com
+    export PASSWORD=your_password
     export MISTRAL_API_KEY=MISTRAL_LLM_api_key
     export MISTRAL_API_ENDPOINT=MISTRAL_API_endpoint
     ```
