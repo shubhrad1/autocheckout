@@ -9,8 +9,8 @@ import time
 load_dotenv()
 
 
-AMAZON_EMAIL=os.getenv("AMAZON_EMAIL")
-AMAZON_PASSWORD=os.getenv("AMAZON_PASSWORD")
+EMAIL=os.getenv("EMAIL")
+PASSWORD=os.getenv("PASSWORD")
 
 
 with Stealth().use_sync(sync_playwright()) as p:
@@ -34,7 +34,7 @@ with Stealth().use_sync(sync_playwright()) as p:
     else:
         print("Buy Now button clicked successfully")
         
-        checkout=authenticator(page, AMAZON_EMAIL, AMAZON_PASSWORD)
+        checkout=authenticator(page, EMAIL, PASSWORD)
     
 
     browser.close()
