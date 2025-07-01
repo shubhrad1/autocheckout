@@ -2,7 +2,6 @@ from ..element_extractor import form_extractor
 import pytest
 from playwright.sync_api import sync_playwright
 from playwright_stealth import Stealth
-import logging
 
 @pytest.fixture
 def mock_page():

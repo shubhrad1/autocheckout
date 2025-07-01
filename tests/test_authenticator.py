@@ -17,6 +17,7 @@ def mock_page():
         page = context.new_page()
         yield page
         browser.close()
+        
 
 def test_authenticator(mock_page):
     """
@@ -32,5 +33,6 @@ def test_authenticator(mock_page):
     result_url = authenticator(mock_page, email, password)
 
     assert "https://www.amazon.in/checkout" in result_url, "Did not navigate to the checkout page after authentication"
+
 
 
