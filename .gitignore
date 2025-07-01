@@ -2,5 +2,6 @@
 .venv
 .vscode
 __pycache__
-*.png
-*output.txt
+
+test_logs/
+test_snapshots/
