@@ -25,7 +25,6 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
 2. Install dependencies:
     ```bash
     pip install -r requirements.txt
-    playwright install
     ```
 
 ## Usage
@@ -52,6 +51,8 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
 -   `ai.py` - AI service for element selection
 
 ## Test Results
+
+(Varies on network quality)
 
 -   Amazon.in - 23s
 -   Flipkart.com - 18s
