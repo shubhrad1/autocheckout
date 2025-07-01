@@ -3,78 +3,91 @@ from ai import ai_service
 import traceback
 def authenticator(page, email, password):
     """
-    Authenticates the user on the Amazon login page.
+    Authenticates the user on the Login Page.
 
     Args:
         page: The Playwright page object.
         email: The user's email address.
         password: The user's password.
+
+    Returns:
+        str: The URL of the page after successful login, or None if authentication fails.
     """
-    try:
-        extracted_elements=form_extractor(page)
 
-        extract_len=len(extracted_elements)
-        if extract_len > 2:
-        
-            stg1_element = ai_service(extracted_elements, "auth1")
-        else:
-            stg1_element=extracted_elements
+    # Extracting all form elements from the page
+    extracted_elements=form_extractor(page)
 
-        if len(stg1_element) < 2:
-            print("No email or phone number input field found.")
-            return None
-        email_field = stg1_element[0]
-        submit_button=stg1_element[1]
+    extract_len=len(extracted_elements)
+    # If the length of extracted elements is greater than 2, use AI service to filter them.
+    # Otherwise, use the extracted elements directly, assuming they are already relevant.
+    if extract_len > 2:
+        stg1_element = ai_service(extracted_elements, "auth1")
+    else:
+        stg1_element=extracted_elements
 
-        email_selector = f"#{email_field['id']}" if email_field['id'] else f"[class='{email_field['class']}']" 
-        submit_selector = f"#{submit_button['id']}" if submit_button['id'] else f"[class='{submit_button['class']}']"
+    # Check if the authentication stage 1 elements contain at least two elements (email/phone field and submit button)
+    if len(stg1_element) < 2:
+        print("No email or phone number input field found.")
+        return None
+    email_field = stg1_element[0]
+    submit_button=stg1_element[1]
 
-        page.fill(email_selector, email)
-        page.click(submit_selector)
-        page.wait_for_timeout(500)  
-        
-        extracted_elements=form_extractor(page)
-        
-        extract_len=len(extracted_elements)
+    # Constructing selectors for email/phone field and submit button
+    email_selector = f"#{email_field['id']}" if email_field['id'] else f"[class='{email_field['class']}']" 
+    submit_selector = f"#{submit_button['id']}" if submit_button['id'] else f"[class='{submit_button['class']}']"
 
-        if extract_len>2:
-            stg2_element = ai_service(extracted_elements, "auth2")
-        else:
-            stg2_element=extracted_elements
-        if len(stg2_element) < 2:
-            print("No password input field found.")
-            return None
-        
-        passfield=stg2_element[0]
-        submit_button=stg2_element[1]
+    page.fill(email_selector, email)    # Fill the email or phone number input field
+    page.click(submit_selector)   # Click the submit button
+    page.wait_for_timeout(500)  # Wait for the action to complete
+    
+    ## Upon successful submission, the page should redirect to the password input stage.
+    extracted_elements=form_extractor(page) # Extracting form elements again after the first submission
+    
+    extract_len=len(extracted_elements) 
 
-        password_selector = f"#{passfield['id']}" if passfield['id'] else f"[class='{passfield['class']}']"
-        submit_selector = f"#{submit_button['id']}" if submit_button['id'] else f"[class='{submit_button['class']}']"
-        
-        element_length = len(stg2_element)
-        otpfield=stg2_element[2]['otp'] if element_length >= 3 else None
-        
-        if otpfield or ('maxLength' in stg2_element[0]): 
-            if stg2_element[0]['maxLength'] > 3 and stg2_element[0]['maxLength'] < 9:
-                print("OTP field found, please enter the OTP manually.....")
-                otp=input("Enter the OTP: ")
-                page.fill(password_selector,otp)
-                page.click(submit_selector)
-                #page.wait_for_timeout(500)
-                return page.url  # Return the current URL after login
-            else:
-                page.fill(password_selector, password)
-                page.click(submit_selector)
-                #page.wait_for_timeout(500)
-                return page.url
-        
+    # If the length of extracted elements is greater than 2, use AI service to filter them.
+    # Otherwise, use the extracted elements directly, assuming they are already relevant.
+    if extract_len>2:
+        stg2_element = ai_service(extracted_elements, "auth2")
+    else:
+        stg2_element=extracted_elements
+
+    # Check if the authentication stage 2 elements contain at least two elements (password field and submit button)
+    if len(stg2_element) < 2:
+        print("No password input field found.")
+        return None
+    
+
+    passfield=stg2_element[0]
+    submit_button=stg2_element[1]
+
+    # Constructing selectors for password field and submit button
+    password_selector = f"#{passfield['id']}" if passfield['id'] else f"[class='{passfield['class']}']"
+    submit_selector = f"#{submit_button['id']}" if submit_button['id'] else f"[class='{submit_button['class']}']"
+    
+    element_length = len(stg2_element)
+    otpfield=stg2_element[2]['otp'] if element_length >= 3 else None
+    
+    # Check if the password field is an OTP field based on its maxLength or presence of otp key
+    if otpfield or ('maxLength' in stg2_element[0]): 
+        # Assuming OTP fields have a maxLength between 4 and 8, if not, treat it as a password field
+        if stg2_element[0]['maxLength'] > 3 and stg2_element[0]['maxLength'] < 9:
+            print("OTP field found, please enter the OTP manually.....")
+            otp=input("Enter the OTP: ")
+            page.fill(password_selector,otp)
+            page.click(submit_selector)
+            #page.wait_for_timeout(500)
+            return page.url  # Return the current URL after login
         else:
             page.fill(password_selector, password)
             page.click(submit_selector)
             #page.wait_for_timeout(500)
             return page.url
+    
+    else:   
+        # If it's a regular password field, fill it with the provided password
+        page.click(submit_selector)
+        page.fill(password_selector, password)
+        return page.url
+        #page.wait_for_timeout(500)
 
-    except Exception as e:
-        print(f"Error during authentication: {e}")
-        print(traceback.format_exc())
-        return None
