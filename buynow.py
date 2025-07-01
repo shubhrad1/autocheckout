@@ -17,8 +17,7 @@ def buynow(page,url):
         
         selector = f"#{buyelement['id']}" if buyelement['id'] else f"button:has-text('{buyelement['text']}')"
         page.click(selector)
-        page.wait_for_timeout(3000)
-        print(f"Clicked on Buy Now button with selector: {selector}")
+        page.wait_for_timeout(500)
         return 0
     
     except Exception as e:

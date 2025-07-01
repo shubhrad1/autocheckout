@@ -31,7 +31,7 @@ def authenticator(page, email, password):
 
         page.fill(email_selector, email)
         page.click(submit_selector)
-        page.wait_for_timeout(3000)  
+        page.wait_for_timeout(500)  
         
         extracted_elements=form_extractor(page)
         
@@ -60,13 +60,18 @@ def authenticator(page, email, password):
                 otp=input("Enter the OTP: ")
                 page.fill(password_selector,otp)
                 page.click(submit_selector)
-                page.wait_for_timeout(3000)
+                #page.wait_for_timeout(500)
                 return page.url  # Return the current URL after login
+            else:
+                page.fill(password_selector, password)
+                page.click(submit_selector)
+                #page.wait_for_timeout(500)
+                return page.url
         
         else:
             page.fill(password_selector, password)
             page.click(submit_selector)
-            page.wait_for_timeout(3000)
+            #page.wait_for_timeout(500)
             return page.url
 
     except Exception as e:

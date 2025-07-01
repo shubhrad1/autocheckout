@@ -6,3 +6,7 @@ __pycache__
 test_logs/
 test_snapshots/
 test_screenshots/
+.pytest_cache/
+tests
+__init__.py
+
