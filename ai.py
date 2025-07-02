@@ -5,7 +5,7 @@ import json
 from typing import List, Dict
 
 
-def ai_service(elements: List, identifier:str) -> Dict:
+def ai_service(elements, identifier:str) -> Dict:
     """
     This function connects to the Mistral AI service to process HTML elements
 
