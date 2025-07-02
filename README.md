@@ -60,4 +60,4 @@ NOTE: Ensure that atleast one address is present in the e-commerce site.
 Best time achieved (Varies on network quality)
 
 -   Amazon.in - 15s
--   Flipkart.com - 18s
+-   Flipkart.com - 18s (Also dependent on OTP receiving and Entering Time)
