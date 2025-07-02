@@ -38,6 +38,8 @@ def buynow(page: Page,url: str)-> None:
         if not buttons or len(buttons) == 0:
             raise Exception("No buttons or submit inputs found on the page. Please check the page structure or the selector used.")
 
+
+
         #Running AI service to identify the "Buy Now" button
         buyelement=ai_service(buttons,"buynow")
 
