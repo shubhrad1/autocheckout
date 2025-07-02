@@ -50,3 +50,4 @@ def form_extractor(page: Page) -> List[Dict[str, str]]:
         return form_elements
     except Exception as e:
         raise Exception(f"Error extracting form elements: {e}")
+    

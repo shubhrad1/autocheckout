@@ -1,6 +1,7 @@
 from element_extractor import form_extractor
 from ai import ai_service
 from playwright.sync_api import Page
+from address import address
 def authenticator(page: Page, email: str, password: str) -> str:
     """
     Authenticates the user on the Login Page.
@@ -74,7 +75,9 @@ def authenticator(page: Page, email: str, password: str) -> str:
                 otp=input("Enter the OTP: ")
                 page.fill(password_selector,otp)
                 page.click(submit_selector)
-                #page.wait_for_timeout(500)
+                
+                page.wait_for_timeout(2500)
+                address(page)
                 return page.url  # Return the current URL after login
             else:
                 page.fill(password_selector, password)

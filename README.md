@@ -29,6 +29,8 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
 
 ## Usage
 
+NOTE: Ensure that atleast one address is present in the e-commerce site.
+
 1. Set your environment variables for credentials:
     ```bash
     export EMAIL=your_email@example.com

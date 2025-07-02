@@ -45,14 +45,18 @@ def ai_service(elements: List, identifier:str) -> Dict:
     auth_prompt_stage1="You analyze HTML UI. Find email or phone number input field and submit or continue button/input. Order of json:Email/Phone field, then Button"
     auth_prompt_stage2="You analyze HTML UI. Find password or OTP input fields, and the submit/continue button or input. If OTP field is found, add otp: true in the JSON response; otherwise, otp: false. OTP has maxlength 2 to 8. Order of json:Password/OTP field, then Button,then OTP true/false" 
     buynow_prompt="You analyzing HTML UI. Find element buy now button/input. If not present give the next best fit element like add to cart or checkout"
-    
+    address_extractor="You analyze a string. Find if Home Address/Office Address/Shipping Address is present and return the address in json format with keys: Phone, Name, Address, City, State, Zipcode. If not present return empty json."
+
+    html_extraction_prompt=f"Here are some elements extracted:{elements},.Return only the relevant elements in JSON format with keys: tag, text, id, class. Do not return any other information.Keep best match first."
+    address_extraction_prompt=f"Here is a string {elements[0]['text']}. Extract the address from here. Dot not return any other information or chat. Just the JSON. If present return topmost address in json .If not present return empty json."
     print("Starting AI service with identifier:", identifier)
 
     # System content mapping based on identifier
     syscontent={
         "auth1": auth_prompt_stage1,
         "auth2": auth_prompt_stage2,
-        "buynow": buynow_prompt
+        "buynow": buynow_prompt,
+        "address": address_extractor
     }
     
     #Generate response from Mistral AI
@@ -61,7 +65,7 @@ def ai_service(elements: List, identifier:str) -> Dict:
             model=model,
             messages=[
                 SystemMessage(content=syscontent[identifier]),
-                UserMessage(content=f"Here are some elements extracted:{elements},.Return only the relevant elements in JSON format with keys: tag, text, id, class. Do not return any other information.Keep best match first."),
+                UserMessage(content=html_extraction_prompt if identifier in ["auth1", "auth2", "buynow"] else address_extraction_prompt),
             ],
         )
     except models.HTTPValidationError as e:
