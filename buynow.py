@@ -33,6 +33,8 @@ def buynow(page: Page,url: str)-> None:
 
         # Running AI service to identify the "Buy Now" button
         buyelement=ai_service(buttons,"buynow")[0]
+        if not buyelement or len(buyelement) == 0:
+            raise Exception("No 'Buy Now' button found. Please check the page or the AI service response.")
         
         # Convert returned element from AI to a selector
         selector = f"#{buyelement['id']}" if buyelement['id'] else f"button:has-text('{buyelement['text']}')"

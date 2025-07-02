@@ -6,10 +6,22 @@ from PIL import Image
 import os
 
 def address(page: Page):
+    """
+    This function extracts the address from a webpage by taking a screenshot of the page,
+    processing the image to extract text, and then using an AI service to identify the address.
+
+    Args:
+        page (Page): The Playwright page object representing the webpage.
+    """
     try:
         page.screenshot(path="address_screenshot.png")
+        if not os.path.exists("address_screenshot.png"):
+            raise Exception("Screenshot was not created.")
+        
         address_image= Image.open("address_screenshot.png")
         address_text = image_to_string(address_image)
+        if not address_text.strip():
+            raise Exception("No text found in the screenshot. Ensure the screenshot contains address information.")
         os.remove("address_screenshot.png")  # Clean up the screenshot file after processing
         address_list=[]
         address_list.append({
