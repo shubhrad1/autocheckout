@@ -2,9 +2,10 @@ import os
 from dotenv import load_dotenv
 from mistralai import Mistral, UserMessage, SystemMessage, models
 import json
+from typing import List, Dict
 
 
-def ai_service(elements, identifier):
+def ai_service(elements: List, identifier:str) -> Dict:
     """
     This function connects to the Mistral AI service to process HTML elements
 
@@ -70,9 +71,18 @@ def ai_service(elements, identifier):
     except Exception as e:
         raise Exception(f"An error occurred while calling the Mistral AI service: {e}")
     
+    response_content = None
     try:
         # Extract the content from the response
         response_content = response.choices[0].message.content
+        
+        # Ensure response_content is a string
+        if isinstance(response_content, list):
+            response_content = "".join(str(chunk) for chunk in response_content)
+        elif response_content is None:
+            raise Exception("Response content is None.")
+        else:
+            response_content = str(response_content)
         # Clean the response content to remove any formatting artifacts
         cleaned_json = response_content.strip("`").lstrip("json").strip()
         # Parse the cleaned JSON string into a Python dictionary

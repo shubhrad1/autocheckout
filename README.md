@@ -40,7 +40,10 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
     ```bash
     python main.py
     ```
-    Or use the provided `run.sh` script.
+    Or use the provided `run.sh` script.Make the `run.sh executable` by runnning:
+    ```bash
+    chmod +x run.sh
+    ```
 
 ## Project Structure
 
@@ -52,7 +55,7 @@ AutoCheckout is a Python automation tool designed to streamline the process of l
 
 ## Test Results
 
-(Varies on network quality)
+Best time achieved (Varies on network quality)
 
--   Amazon.in - 23s
+-   Amazon.in - 15s
 -   Flipkart.com - 18s

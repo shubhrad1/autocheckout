@@ -1,8 +1,11 @@
-def element_extractor(page, selector):
+from typing import List, Dict
+from playwright.sync_api import Page
+
+def element_extractor(page: Page, selector: str) -> List[Dict[str, str]]:
     """
     This function extracts elements from a webpage using Playwright.
     Args:
-        page: The Playwright page object.
+        page: The Playwright page object (playwright.sync_api.Page).
         selector (str): The CSS selector to find elements on the page.
     Returns:
         list: A list of dictionaries containing information about the elements found.
@@ -22,7 +25,7 @@ def element_extractor(page, selector):
         raise Exception(f"Error extracting elements with selector '{selector}': {e}")
 
 
-def form_extractor(page):
+def form_extractor(page: Page) -> List[Dict[str, str]]:
     """
     This function extracts form elements from a webpage using Playwright.
     Args:

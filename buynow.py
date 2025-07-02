@@ -1,8 +1,8 @@
 from element_extractor import element_extractor
 from ai import ai_service
-
+from playwright.sync_api import Page
 # This function automates the "Buy Now" process on a webpage.
-def buynow(page,url):
+def buynow(page: Page,url: str)-> None:
     """
     This function automates the "Buy Now" process on a webpage.
     It navigates to the specified URL, extracts all buttons and submit inputs,
@@ -11,8 +11,7 @@ def buynow(page,url):
     Args:
         page: The Playwright page object.
         url (str): The URL of the webpage to navigate to.
-    Returns:
-        int: Returns 0 on success, -1 on failure.
+
 
     """
     try:

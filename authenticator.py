@@ -1,7 +1,7 @@
 from element_extractor import form_extractor
 from ai import ai_service
-import traceback
-def authenticator(page, email, password):
+from playwright.sync_api import Page
+def authenticator(page: Page, email: str, password: str) -> str:
     """
     Authenticates the user on the Login Page.
 
@@ -68,7 +68,8 @@ def authenticator(page, email, password):
         # Check if the password field is an OTP field based on its maxLength or presence of otp key
         if otpfield or ('maxLength' in stage2_element[0]): 
             # Assuming OTP fields have a maxLength between 4 and 8, if not, treat it as a password field
-            if stage2_element[0]['maxLength'] > 3 and stage2_element[0]['maxLength'] < 9:
+            max_length = int(stage2_element[0]['maxLength'])
+            if max_length > 3 and max_length < 9:
                 print("OTP field found, please enter the OTP manually.....")
                 otp=input("Enter the OTP: ")
                 page.fill(password_selector,otp)
